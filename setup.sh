@@ -1,6 +1,6 @@
 dir=$(pwd)
 oldfiles=$(pwd)/old
-files=".vimrc .gitconfig .bash_profile"
+files=".vimrc .gitconfig .bashrc .bash_aliases"
 
 mkdir -p $oldfiles
 

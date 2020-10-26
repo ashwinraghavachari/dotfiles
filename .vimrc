@@ -55,7 +55,7 @@ command W w
 command Q q
 
 " Pathogen to manage plugins
-execute pathogen#infect()
+"execute pathogen#infect()
 
 " Syntastic syntax checking!
 " show list of errors and warnings on the current file
