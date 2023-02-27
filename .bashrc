@@ -24,7 +24,7 @@ HISTFILESIZE=2000
 shopt -s checkwinsize
 
 # After each command, append to the history file and reread it
-export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+#export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
@@ -118,5 +118,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-source /opt/ros/kinetic/setup.bash
 
+export OP_DEVICE="qifu72kseeptnvw7h544i27gn4"
+export OP_SESSION_appliedintuition="_oJaptqJfpWu0ooBOG4seuRkMMl4N6CIWlAz5yBkxo0"
