@@ -7,6 +7,7 @@ alias gp='git pull --rebase'
 alias gk='git checkout'
 alias gkb='git checkout -b'
 alias gr='git rebase'
+alias gb='git branch'
 
 alias dps='docker ps'
 alias drm='docker rm -f'
