@@ -17,3 +17,7 @@ alias di='docker images'
 alias ddst='./docker/dev/start.sh'
 alias ddin='./docker/dev/into.sh'
 alias ddrm='./docker/dev/remove.sh'
+
+# Airtable script update
+alias update_airtable='git stash && git fetch origin master:master && gr master && git stash pop && ./update_airtable.sh'
+
