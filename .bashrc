@@ -120,4 +120,4 @@ if ! shopt -oq posix; then
 fi
 
 export OP_DEVICE="qifu72kseeptnvw7h544i27gn4"
-export OP_SESSION_appliedintuition="HZ8WcCqkOjRxVggmTzsmtsvqU9tc8UQs6N9RK0x4eCM"
+export OP_SESSION_appliedintuition="w0ROUIB16UQ8jUKfAlYabrBlLyhnPwOUf6iLMxMBklY"
