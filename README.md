@@ -59,6 +59,17 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 | `/standup` | Summarizes recent git commits into a standup update |
 | `/explain <target>` | Explains how a file, function, or concept works |
 | `/review` | Reviews staged/unstaged changes before committing |
+| `/slack-inbox` | Scans Slack for unhandled "AI: Claude" triggers and acts on each |
+| `/recruit-source` | Sources Bay Area engineering candidates in LinkedIn Recruiter |
+| `/keep-files-small` | Guideline: keep code files small for LLM context efficiency |
+| `/respect-the-spec` | Guideline: respect existing constraints when making changes |
+| `/requirements-not-solutions` | Guideline: specify requirements, not implementation |
+| `/the-tail-wagging-the-dog` | Guideline: don't let minor details derail the main objective |
+| `/culture-eats-strategy` | Guideline: flag codebase pattern conflicts with user instructions |
+| `/preparatory-refactoring` | Guideline: refactor first, then make the change easy |
+| `/scientific-debugging` | Guideline: systematic investigation over random fixes |
+| `/walking-skeleton` | Guideline: build minimal end-to-end first, then refine |
+| `/stop-digging` | Guideline: know when to abandon a difficult path and reconsider |
 
 Requires the [Claude Code CLI](https://claude.ai/code). `setup.sh` symlinks these into `~/.claude/commands/` automatically.
 
