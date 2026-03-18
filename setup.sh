@@ -30,6 +30,18 @@ if [ "$OS" = "Darwin" ]; then
     fi
 fi
 
+# --- zshrc: source .bash_aliases ---
+if [ -n "$ZSH_VERSION" ] || command -v zsh &>/dev/null; then
+    if ! grep -q "bash_aliases" ~/.zshrc 2>/dev/null; then
+        echo '[ -f "$HOME/dotfiles/.bash_aliases" ] && source "$HOME/dotfiles/.bash_aliases"' >> ~/.zshrc
+        echo "added bash_aliases source line to ~/.zshrc"
+    else
+        echo "~/.zshrc already sources bash_aliases — skipping"
+    fi
+else
+    echo "zsh not found — skipping ~/.zshrc setup"
+fi
+
 # --- Claude Code commands ---
 if [ -d "$dir/.claude/commands" ]; then
     echo "setting up claude commands"
