@@ -70,6 +70,7 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 | `/scientific-debugging` | Guideline: systematic investigation over random fixes |
 | `/walking-skeleton` | Guideline: build minimal end-to-end first, then refine |
 | `/stop-digging` | Guideline: know when to abandon a difficult path and reconsider |
+| `/confirm-before-external-write` | Guideline: always ask permission before writing to Slack, Jira, Calendar, GitHub, or Confluence |
 | `/pylon-digest` | Pylon NA ticket digest |
 
 Requires the [Claude Code CLI](https://claude.ai/code). `setup.sh` symlinks these into `~/.claude/commands/` automatically.
