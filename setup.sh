@@ -62,16 +62,17 @@ cmd_dotfiles() {
         done
     fi
 
-    # Bootstrap secrets file if missing
-    if [ ! -f "$HOME/.secrets" ] && [ -f "$dir/.secrets.template" ]; then
-        touch "$HOME/.secrets" && chmod 600 "$HOME/.secrets"
-        echo ""
-        echo -e "  ${YELLOW}~/.secrets not found — run './setup.sh secrets' to configure API keys${NC}"
-    fi
-
     echo ""
     echo -e "${GREEN}done.${NC} open a new shell to apply changes."
     echo ""
+
+    # Offer to set up secrets
+    [ ! -f "$HOME/.secrets" ] && echo -e "${YELLOW}~/.secrets not found.${NC}"
+    printf "Set up secrets now? [y/N] "
+    local answer
+    read -r answer
+    echo ""
+    [[ "$answer" =~ ^[Yy] ]] && cmd_secrets
 }
 
 cmd_secrets() {
