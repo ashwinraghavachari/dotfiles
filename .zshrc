@@ -10,3 +10,6 @@ autoload -Uz compinit && compinit
 
 # Source shared config
 [ -f "$HOME/.shellrc" ] && source "$HOME/.shellrc"
+
+# Machine-specific overrides (not in repo)
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
