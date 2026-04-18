@@ -67,3 +67,27 @@ adopt-claude-command() {
 
 # Secrets
 [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+
+check-secrets() {
+    local template="$HOME/dotfiles/.secrets.template"
+    if [ ! -f "$template" ]; then
+        echo "no template found at $template"
+        return 1
+    fi
+    local set_count=0 missing_count=0
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^([A-Z_][A-Z0-9_]*)= ]]; then
+            varname="${BASH_REMATCH[1]}"
+            if eval "test -n \"\${${varname}}\"" 2>/dev/null; then
+                printf "  \033[0;32m✓\033[0m %s\n" "$varname"
+                ((set_count++))
+            else
+                printf "  \033[0;31m✗\033[0m %s\n" "$varname"
+                ((missing_count++))
+            fi
+        fi
+    done < "$template"
+    echo ""
+    echo "  $set_count set, $missing_count missing"
+    [ "$missing_count" -gt 0 ] && echo "  run: ~/dotfiles/setup-secrets.sh"
+}
