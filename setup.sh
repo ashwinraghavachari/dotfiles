@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 dir=$(pwd)
 oldfiles=$(pwd)/old
 OS="$(uname -s)"
@@ -7,10 +8,10 @@ mkdir -p $oldfiles
 # --- Dotfiles ---
 echo "setting up dotfiles ($OS)"
 
-files=".vimrc .gitconfig .bashrc .bash_aliases"
+files=".vimrc .gitconfig .bashrc .shellrc"
 
-# .bash_profile is only used on macOS (login shells)
-[ "$OS" = "Darwin" ] && files="$files .bash_profile"
+# Platform-specific rc files
+[ "$OS" = "Darwin" ] && files="$files .bash_profile .zshrc"
 
 echo "moving old files to $oldfiles"
 
@@ -30,18 +31,6 @@ if [ "$OS" = "Darwin" ]; then
     fi
 fi
 
-# --- zshrc: source .bash_aliases ---
-if [ -n "$ZSH_VERSION" ] || command -v zsh &>/dev/null; then
-    if ! grep -q "bash_aliases" ~/.zshrc 2>/dev/null; then
-        echo '[ -f "$HOME/dotfiles/.bash_aliases" ] && source "$HOME/dotfiles/.bash_aliases"' >> ~/.zshrc
-        echo "added bash_aliases source line to ~/.zshrc"
-    else
-        echo "~/.zshrc already sources bash_aliases — skipping"
-    fi
-else
-    echo "zsh not found — skipping ~/.zshrc setup"
-fi
-
 # --- Claude Code commands ---
 if [ -d "$dir/.claude/commands" ]; then
     echo "setting up claude commands"
@@ -51,4 +40,13 @@ if [ -d "$dir/.claude/commands" ]; then
         echo "  linking claude command: $fname"
         ln -sf $file ~/.claude/commands/$fname
     done
+fi
+
+# --- Secrets ---
+if [ ! -f "$HOME/.secrets" ]; then
+    if [ -f "$dir/.secrets.template" ]; then
+        cp "$dir/.secrets.template" "$HOME/.secrets"
+        echo ""
+        echo "  created ~/.secrets from template — fill in your API keys before opening a new shell"
+    fi
 fi

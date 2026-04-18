@@ -1,0 +1,69 @@
+OS="${OS:-$(uname -s)}"
+
+# Colors and ls
+if [ "$OS" = "Darwin" ]; then
+    export CLICOLOR=1
+    export LSCOLORS=ExFxBxDxCxegedabagacad
+    alias ls='ls -G'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+elif [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+alias l='ls -lah'
+alias ll='ls -alF'
+alias la='ls -A'
+
+# Long-running command alert
+if [ "$OS" = "Darwin" ]; then
+    alias alert='osascript -e "display notification \"$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')\" with title \"$([ $? = 0 ] && echo Done || echo Error)\""'
+else
+    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+fi
+
+# Git
+alias gl='git log --graph --pretty="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset"'
+alias gs='git status'
+alias gcm='git commit -m'
+alias gp='git pull --rebase'
+alias gk='git checkout'
+alias gkb='git checkout -b'
+alias gr='git rebase'
+alias gb='git branch'
+
+# Docker
+alias dps='docker ps'
+alias drm='docker rm -f'
+alias di='docker images'
+
+# Applied
+alias ddst='./dev/containers/dev/start.sh'
+alias ddin='./dev/containers/dev/into.sh'
+alias ddrm='./dev/containers/dev/remove.sh'
+
+# Claude Code: adopt a command from ~/.claude/commands/ into dotfiles and replace with symlink
+adopt-claude-command() {
+    local fname="$1"
+    local src="$HOME/.claude/commands/$fname"
+    local dest="$HOME/dotfiles/.claude/commands/$fname"
+
+    [ -z "$fname" ] && { echo "usage: adopt-claude-command <filename.md>"; return 1; }
+    [ ! -f "$src" ] && { echo "not found: $src"; return 1; }
+
+    if [ -L "$src" ]; then
+        echo "$fname is already a symlink — already in dotfiles"
+        return 0
+    fi
+
+    mv "$src" "$dest" && ln -sf "$dest" "$src"
+    echo "adopted $fname → $dest"
+}
+
+# Secrets
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
