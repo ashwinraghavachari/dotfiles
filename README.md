@@ -1,22 +1,66 @@
 # dotfiles
 
-Personal configuration for bash, vim, and git. Works on macOS and Linux.
+Personal configuration for bash, zsh, vim, and git. Works on macOS and Linux.
 
-## Setup
+---
 
-Clone the repo and run the setup script from inside it:
+## New machine setup
 
 ```bash
-git clone <repo-url> ~/dotfiles
+git clone https://github.com/ashwinraghavachari/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./setup.sh
 ```
 
-This will:
-- Back up any existing config files to `./old/`
-- Symlink dotfiles into `~`
-- Install Homebrew if it's missing (macOS only)
-- Symlink Claude Code commands into `~/.claude/commands/`
+The setup script will walk you through everything step by step. After it completes:
+
+- [ ] Fill in `~/.secrets` with API keys (`./setup.sh secrets set`)
+- [ ] Add machine-specific shell config to `~/.zshrc.local` (PATH additions, SDK inits, tool completions)
+- [ ] Fill in `~/.ssh/config` with your hosts (template copied to `~/.ssh/config` by setup)
+- [ ] Install App Store apps manually (these can't be scripted)
+- [ ] Set up SSH keys (`ssh-keygen -t ed25519 -C "your@email.com"`) and add to GitHub
+
+---
+
+## Commands
+
+```bash
+./setup.sh                  # full setup
+./setup.sh brew             # install packages from Brewfile
+./setup.sh secrets set      # set API key values interactively
+./setup.sh secrets add      # add a new secret to track
+./setup.sh secrets list     # check what's configured
+./setup.sh secrets remove   # remove a secret
+./setup.sh help             # show all commands
+```
+
+---
+
+## What's included
+
+| File | Purpose |
+|------|---------|
+| `.bashrc` | Bash-specific config — history, prompt, completion |
+| `.zshrc` | Zsh-specific config — history, completion; sources `.shellrc` |
+| `.shellrc` | Cross-shell config — aliases, functions, sources `~/.secrets` |
+| `.bash_profile` | macOS login shell entrypoint — inits Homebrew, sources `.bashrc` |
+| `.gitconfig` | Git settings — rebase-on-pull, LFS, global ignore, vim editor |
+| `.gitignore_global` | Global gitignore — `.DS_Store`, editor files, secrets, build artifacts |
+| `.vimrc` | Vim settings — indentation, search, Syntastic, persistent undo |
+| `.secrets.template` | Manifest of required API keys (copy becomes `~/.secrets`) |
+| `.ssh/config.template` | SSH config template (copy becomes `~/.ssh/config`) |
+| `Brewfile` | Homebrew packages (`brew bundle` installs everything) |
+| `setup.sh` | Bootstrap script |
+| `.claude/commands/` | Claude Code slash commands |
+
+### Not in repo (machine-specific)
+
+| File | Purpose |
+|------|---------|
+| `~/.secrets` | Actual API key values |
+| `~/.zshrc.local` | Machine-specific shell config (PATH, SDK inits, completions) |
+| `~/.ssh/config` | SSH host config (filled in from template) |
+| `~/.gitconfig.work` | Work identity for `[includeIf]` (see `.gitconfig` comments) |
 
 ---
 
@@ -33,57 +77,10 @@ This will:
 | bash-completion | `brew install bash-completion@2` | `apt install bash-completion` |
 | curl | built-in | `apt install curl` |
 
-On macOS, install [Homebrew](https://brew.sh) first — `setup.sh` will do this automatically if it's missing.
-
-### Vim plugins
-
-The `.vimrc` is configured for [Syntastic](https://github.com/vim-syntastic/syntastic) for syntax checking. Install it with your preferred plugin manager (e.g. [vim-plug](https://github.com/junegunn/vim-plug)):
-
-```vim
-Plug 'vim-syntastic/syntastic'
-```
-
-Syntastic calls out to language-specific linters. Install whichever you use:
-
-| Language | Linters | macOS | Linux |
-|----------|---------|-------|-------|
-| Python | pylint, flake8, pylama | `pip install pylint flake8 pylama` | same |
-| C/C++ | clang | `brew install llvm` | `apt install clang` |
+On macOS, install [Homebrew](https://brew.sh) first — `setup.sh` will do this automatically if missing. Then run `./setup.sh brew` to install everything from the Brewfile.
 
 ### Claude Code commands
 
-The `.claude/commands/` directory contains slash commands for Claude Code:
+The `.claude/commands/` directory contains slash commands for Claude Code. `setup.sh` symlinks these into `~/.claude/commands/` automatically.
 
-| Command | What it does |
-|---------|--------------|
-| `/standup` | Summarizes recent git commits into a standup update |
-| `/explain <target>` | Explains how a file, function, or concept works |
-| `/review` | Reviews staged/unstaged changes before committing |
-| `/slack-inbox` | Scans Slack for unhandled "AI: Claude" triggers and acts on each |
-| `/recruit-source` | Sources Bay Area engineering candidates in LinkedIn Recruiter |
-| `/keep-files-small` | Guideline: keep code files small for LLM context efficiency |
-| `/respect-the-spec` | Guideline: respect existing constraints when making changes |
-| `/requirements-not-solutions` | Guideline: specify requirements, not implementation |
-| `/the-tail-wagging-the-dog` | Guideline: don't let minor details derail the main objective |
-| `/culture-eats-strategy` | Guideline: flag codebase pattern conflicts with user instructions |
-| `/preparatory-refactoring` | Guideline: refactor first, then make the change easy |
-| `/scientific-debugging` | Guideline: systematic investigation over random fixes |
-| `/walking-skeleton` | Guideline: build minimal end-to-end first, then refine |
-| `/stop-digging` | Guideline: know when to abandon a difficult path and reconsider |
-| `/confirm-before-external-write` | Guideline: always ask permission before writing to Slack, Jira, Calendar, GitHub, or Confluence |
-| `/pylon-digest` | Pylon NA ticket digest |
-
-Requires the [Claude Code CLI](https://claude.ai/code). `setup.sh` symlinks these into `~/.claude/commands/` automatically.
-
----
-
-## What's included
-
-| File | Purpose |
-|------|---------|
-| `.bashrc` | Shell config — history, prompt, colors, completion, aliases |
-| `.bash_aliases` | Git, Docker, and project-specific aliases |
-| `.bash_profile` | macOS login shell entrypoint — inits Homebrew, sources `.bashrc` |
-| `.gitconfig` | Git user settings, rebase-on-pull, LFS, vim as editor |
-| `.vimrc` | Vim settings — indentation, search, Syntastic, persistent undo |
-| `.claude/commands/` | Claude Code slash commands |
+Requires the [Claude Code CLI](https://claude.ai/code).

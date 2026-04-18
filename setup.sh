@@ -23,6 +23,7 @@ cmd_help() {
     echo ""
     echo "commands:"
     echo "  (none)         full setup — symlink dotfiles, install homebrew, link claude commands"
+    echo "  brew           install packages from Brewfile"
     echo "  secrets        manage API keys in ~/.secrets"
     echo "  help           show this message"
     echo ""
@@ -34,6 +35,7 @@ cmd_help() {
     echo ""
     echo "examples:"
     echo "  ./setup.sh                  # new machine setup"
+    echo "  ./setup.sh brew             # install packages from Brewfile"
     echo "  ./setup.sh secrets set      # set values for all secrets in the template"
     echo "  ./setup.sh secrets add      # add a new secret"
     echo "  ./setup.sh secrets list     # see what's configured"
@@ -59,7 +61,7 @@ cmd_dotfiles() {
     echo ""
     echo -e "${BOLD}setting up dotfiles ($OS)${NC}"
 
-    files=".vimrc .gitconfig .bashrc .shellrc"
+    files=".vimrc .gitconfig .gitignore_global .bashrc .shellrc"
     [ "$OS" = "Darwin" ] && files="$files .bash_profile .zshrc"
 
     mkdir -p "$oldfiles"
@@ -89,16 +91,42 @@ cmd_dotfiles() {
         done
     fi
 
+    # SSH config bootstrap
+    if [ ! -f "$HOME/.ssh/config" ] && [ -f "$dir/.ssh/config.template" ]; then
+        mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+        cp "$dir/.ssh/config.template" "$HOME/.ssh/config"
+        chmod 600 "$HOME/.ssh/config"
+        echo "  created ~/.ssh/config from template — fill in your hosts"
+    fi
+
     echo ""
     echo -e "${GREEN}done.${NC} open a new shell to apply changes."
     echo ""
 
-    [ ! -f "$SECRETS" ] && echo -e "${YELLOW}~/.secrets not found.${NC}"
-    printf "Set up secrets now? [y/N] "
+    printf "Install Homebrew packages from Brewfile? [y/N] "
     local answer
     read -r answer
     echo ""
+    [[ "$answer" =~ ^[Yy] ]] && cmd_brew
+
+    [ ! -f "$SECRETS" ] && echo -e "${YELLOW}~/.secrets not found.${NC}"
+    printf "Set up secrets now? [y/N] "
+    read -r answer
+    echo ""
     [[ "$answer" =~ ^[Yy] ]] && cmd_secrets_set
+}
+
+# --- Brew ---
+
+cmd_brew() {
+    if [ ! -f "$dir/Brewfile" ]; then
+        echo "error: Brewfile not found at $dir/Brewfile" >&2
+        exit 1
+    fi
+    echo ""
+    echo -e "${BOLD}Installing Homebrew packages${NC}"
+    brew bundle --file="$dir/Brewfile"
+    echo ""
 }
 
 # --- Secrets: add (new secret) ---
@@ -347,6 +375,7 @@ cmd_secrets_remove() {
 
 case "${1:-}" in
     "")        cmd_dotfiles ;;
+    brew)      cmd_brew ;;
     secrets)
         case "${2:-}" in
             add)    cmd_secrets_add ;;

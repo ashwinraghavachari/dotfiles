@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+.venv
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+
+# Secrets
+.env.local
+.env.*.local
+secrets.json
+credentials.json

@@ -7,6 +7,12 @@
 	rebase = true
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
+
+# Per-directory identity — copy the block below to ~/.gitconfig.work and fill in
+# your work email, then uncomment the includeIf line pointing to your work repos.
+# [includeIf "gitdir:~/work/"]
+#     path = ~/.gitconfig.work
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
