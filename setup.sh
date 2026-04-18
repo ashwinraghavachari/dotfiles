@@ -93,7 +93,7 @@ cmd_secrets() {
 
     local set_count=0 keep_count=0 skip_count=0 desc=""
 
-    while IFS= read -r line; do
+    while IFS= read -r line <&3; do
         if [[ "$line" =~ ^#[[:space:]]?(.*) ]]; then
             desc="${BASH_REMATCH[1]}"
             continue
@@ -141,7 +141,7 @@ cmd_secrets() {
             echo ""
             desc=""
         fi
-    done < "$template"
+    done 3< "$template"
 
     echo -e "${BOLD}done:${NC} ${set_count} set, ${keep_count} kept, ${skip_count} skipped"
     echo "Open a new shell (or run 'source ~/.secrets') to apply."
