@@ -38,9 +38,8 @@ Then ask: _"Should I go ahead?"_ — do not proceed until the user says yes.
 ## Example (Jira)
 
 > I'm going to create a Jira ticket:
-> - **Project**: NEU | **Flow**: AVP | **Sprint**: 2026.11
-> - **Summary**: Fix map proto boundary handling
-> - **Effort**: 1
+> - **Project**: ENG | **Summary**: Fix null pointer in auth middleware
+> - **Priority**: Medium | **Assignee**: me
 >
 > Should I go ahead?
 
