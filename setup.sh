@@ -22,8 +22,9 @@ cmd_help() {
     echo -e "${BOLD}usage:${NC} ./setup.sh [command]"
     echo ""
     echo "commands:"
-    echo "  (none)         full setup — symlink dotfiles, install homebrew, link claude commands"
+    echo "  (none)         full setup — symlink dotfiles, install homebrew, link claude rules/commands"
     echo "  brew           install packages from Brewfile"
+    echo "  claude         link claude rules and commands into ~/.claude"
     echo "  secrets        manage API keys in ~/.secrets"
     echo "  help           show this message"
     echo ""
@@ -36,6 +37,7 @@ cmd_help() {
     echo "examples:"
     echo "  ./setup.sh                  # new machine setup"
     echo "  ./setup.sh brew             # install packages from Brewfile"
+    echo "  ./setup.sh claude           # link claude rules and commands"
     echo "  ./setup.sh secrets set      # set values for all secrets in the template"
     echo "  ./setup.sh secrets add      # add a new secret"
     echo "  ./setup.sh secrets list     # see what's configured"
@@ -52,6 +54,37 @@ cmd_secrets_help() {
     echo "  set     walk through all template secrets and set values"
     echo "  list    show which secrets are set vs missing"
     echo "  remove  remove a secret from the template and ~/.secrets"
+    echo ""
+}
+
+# --- Claude ---
+
+cmd_claude() {
+    echo ""
+    echo -e "${BOLD}linking claude rules and commands${NC}"
+
+    if [ -d "$dir/.claude/rules" ]; then
+        echo "  linking rules"
+        mkdir -p ~/.claude/rules
+        for file in "$dir/.claude/rules/"*.md; do
+            fname=$(basename "$file")
+            ln -sf "$file" ~/.claude/rules/"$fname"
+            echo "    → $fname"
+        done
+    fi
+
+    if [ -d "$dir/.claude/commands" ]; then
+        echo "  linking commands"
+        mkdir -p ~/.claude/commands
+        for file in "$dir/.claude/commands/"*.md; do
+            fname=$(basename "$file")
+            ln -sf "$file" ~/.claude/commands/"$fname"
+            echo "    → $fname"
+        done
+    fi
+
+    echo ""
+    echo -e "${GREEN}done.${NC}"
     echo ""
 }
 
@@ -81,15 +114,7 @@ cmd_dotfiles() {
         fi
     fi
 
-    if [ -d "$dir/.claude/commands" ]; then
-        echo ""
-        echo "  linking claude commands"
-        mkdir -p ~/.claude/commands
-        for file in "$dir/.claude/commands/"*.md; do
-            fname=$(basename "$file")
-            ln -sf "$file" ~/.claude/commands/"$fname"
-        done
-    fi
+    cmd_claude
 
     # SSH config bootstrap
     if [ ! -f "$HOME/.ssh/config" ] && [ -f "$dir/.ssh/config.template" ]; then
@@ -376,6 +401,7 @@ cmd_secrets_remove() {
 case "${1:-}" in
     "")        cmd_dotfiles ;;
     brew)      cmd_brew ;;
+    claude)    cmd_claude ;;
     secrets)
         case "${2:-}" in
             add)    cmd_secrets_add ;;

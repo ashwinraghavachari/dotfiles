@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(brew list *)",
+      "Bash(brew install *)",
+      "Bash(brew bundle *)",
+      "Bash(chmod +x *)",
+      "Bash(command -v git-filter-repo)",
+      "Bash(git-filter-repo --version)",
+      "Bash(git-filter-repo *)",
+      "Bash(ln -sf ~/dotfiles/.shellrc ~/.shellrc)",
+      "Bash(ln -sf ~/dotfiles/.zshrc ~/.zshrc)",
+      "Bash(ln -sf ~/dotfiles/.gitignore_global ~/.gitignore_global)",
+      "Bash(mv ~/.zshrc ~/dotfiles/old/zshrc.bak)"
+    ]
+  }
+}
